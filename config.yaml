@@ -1,0 +1,38 @@
+training: !!bool "true"
+device: "cpu"
+unprocessed_data: 'E:\\archieve\\Mozilla_data\\train'
+---
+data:
+    train_path: 'E:\\workspace\\lstm-pytorch\\train_tisv'
+    test_path: 'E:\\workspace\\lstm-pytorch\\test_tisv'
+    data_preprocessed: !!bool "true" 
+    sr: 44100
+    nfft: 4096 #For mel spectrogram preprocess
+    window: 0.025 #(s)
+    hop: 0.01 #(s)
+    nmels: 40 #Number of mel energies
+    tisv_frame: 180 #Max number of time steps in input after preprocess
+---   
+model:
+    hidden: 768 #Number of LSTM hidden layer units
+    num_layer: 3 #Number of LSTM layers
+    proj: 256 #Embedding size
+    model_path: './model.model' #Model path for testing, inference, or resuming training
+---
+train:
+    N : 5 #Number of speakers in batch
+    M : 4 #Number of utterances per speaker
+    num_workers: 0 #number of workers for dataloader
+    lr: 0.01 
+    epochs: 1000 #Max training speaker epoch
+    log_interval: 10 #Epochs before printing progress
+    log_file: './speech_id_checkpoint/Stats'
+    checkpoint_interval: 120 #Save model after x speaker epochs
+    checkpoint_dir: './speech_id_checkpoint'
+    restore: !!bool "false" #Resume training from previous model path
+---
+test:
+    N : 4 #Number of speakers in batch
+    M : 6 #Number of utterances per speaker
+    num_workers: 0 #number of workers for data laoder
+    epochs: 10 #testing speaker epochs
